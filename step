@@ -1,0 +1,113 @@
+git init 
+npm init -y 0 npm init
+npm i webpack webpack-cli -D
+crear src/index.js
+npx webpack
+
+npx webpack --mode development
+npx webpack --mode production 
+________________________
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js'
+  },
+  resolve: {
+    extensions: ['.js']
+  },
+}
+
+npx webpack --mode production --config webpack.config.js
+pasar a package el script
+
+________________________
+
+babel-loader nos permite usar babel con webpack
+@babel/core es babel en general
+@babel/preset-env trae y te permite usar las ultimas características de JavaScript
+@babel/plugin-transform-runtime te permite trabajar con todo el tema de asincronismo como ser async y await
+Debes crear el archivo de configuración de babel el cual tiene como nombre .babelrc
+npm install -D babel-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime
+
+.babelrc
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js'
+  },
+  resolve: {
+    extensions: ['.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ],
+  }
+}
+
+____________________
+
+npm i html-webpack-plugin -D
+crear public html 
+
+_________________
+
+npm i mini-css-extract-plugin css-loader -D
+
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js',
+  },
+  resolve: {
+    extensions: ['.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.css|.styl$/i,
+        use: [MiniCssExtractPlugin.loader,
+          'css-loader',
+          'stylus-loader'
+        ],
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: './public/index.html',
+      filename: './index.html'
+    }),
+    new MiniCssExtractPlugin(),
+  ]
+}
+index.js agregar
+import './styles/main.css';
+
+npm i -D node-sass sass-loader
